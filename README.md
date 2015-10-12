@@ -5,6 +5,11 @@ Incremental DOM and Babel. Think ES6 Templates + Incremental DOM working
 together. DOM travseral is made possible with
 [parse5](https://github.com/inikulin/parse5).
 
+## Status
+
+This is still new and lacks heavy testing. As this project matures its
+documentation and test will as well.
+
 ## How does it work?
 
 Templates are just Javascript strings with special scope. In fact, there
@@ -71,8 +76,19 @@ Rendering a template is done by calling the `.render()` method on a
 
 ```js
 const tpl = new Template('<div>Hello ${name}</div>');
-const str = tpl.render({name: 'kinkajou'}); // <div>Hello kinkajou}</div>'
+const str = tpl.render({name: 'kinkajou'}); // <div>Hello kinkajou</div>'
 ```
+
+A templates source for rendering can be changed dynamically. You can
+define a new source for a template with the `.define(source)` method on
+a `Template` instance.
+
+```js
+tpl.source('<div>Goodbye ${name}</div>');
+```
+
+This makes it easy for views with multiple purposes to reuse the same
+template.
 
 ## Views
 
@@ -87,7 +103,12 @@ as an override. After rendering a view you can call the views
 incremental-dom is used. A patch is applied if needed, otherwise the
 tree is left intact.
 
+```js
+const tpl = new Template('<img src="${url}" />');
+const view = new View(tpl, {url: '/logo.png'});
+view.render(document.querySelector('#element'));
+```
+
 ## License
 
 MIT
-

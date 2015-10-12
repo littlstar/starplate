@@ -92,6 +92,7 @@ export default class Template {
     return (data) => {
       data = ensureObject(data);
 
+      let wrap = string;
       let header = (
         Object
         .keys(data)
@@ -107,7 +108,6 @@ export default class Template {
 
       header = `var ${header.join(', ')};`;
 
-      let wrap = string;
 
       if ('function' != typeof wrap) {
         wrap = new Function('data', `'use strict'; ${header} return \`${string}\``);
@@ -124,10 +124,49 @@ export default class Template {
    *
    * @public
    * @constructor
-   * @param {String|Function} html
+   * @param {String|Function} source
    */
 
-  constructor (html) {
-    this.render = Template.createPartial(html);
+  constructor (source) {
+
+    /**
+     * The template source.
+     *
+     * @public
+     * @type {Function|String}
+     * @name source
+     */
+
+    this.source = null;
+
+    /**
+     * A partial function used to
+     * render a template.
+     *
+     * @public
+     * @method
+     * @name render
+     * @param {Object} [data = {}]
+     */
+
+    this.render = null;
+
+    // intial definition
+    this.define(source);
+  }
+
+  /**
+   * Defines the template source.
+   *
+   * @public
+   * @method
+   * @name define
+   * @param {String|Function} source
+   */
+
+  define (source) {
+    this.source = source;
+    this.render = Template.createPartial(source);
+    return this;
   }
 }

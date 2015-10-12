@@ -5,6 +5,7 @@
  */
 
 import EventEmitter from 'events';
+import Template from './template';
 import Parser from './parser';
 
 /**
@@ -105,6 +106,11 @@ export default class View extends EventEmitter {
 
   constructor (template, model = {}) {
     super();
+
+    // ensure template
+    if (false == template instanceof Template) {
+      template = new Template(template);
+    }
 
     /**
      * The template associated with this view.
