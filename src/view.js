@@ -1,7 +1,24 @@
 "use strict";
 
+/**
+ * Module dependencies.
+ */
+
 import EventEmitter from 'events';
 import Parser from './parser';
+
+/**
+ * Grab first element of an array like object
+ * if possible, otherwise use argument.
+ *
+ * @private
+ * @function
+ * @name first
+ * @param {Mixed} a
+ * @return {Mixed}
+ */
+
+const first = a => a && a.length && a[0] ? a[0] : a;
 
 /**
  * Creates a DOM from an HTML string.
@@ -16,11 +33,23 @@ import Parser from './parser';
 const dom = html => {
   const body = document.createElement('body');
   const tmp = document.createDocumentFragment();
-  body.innerHTML = html;
-  tmp.appendChild(body);
-  const nodes = body.children;
-  return (nodes.length > 1 ? nodes : nodes[0]) || null;
+  let nodes = null;
+  try {
+    body.innerHTML = html;
+    tmp.appendChild(body);
+    nodes = body.children;
+  } catch (e) { }
+  return (nodes && nodes.length > 1 ? nodes : nodes[0]) || html;
 };
+
+/**
+ * Known view helpers defined with View.helper().
+ *
+ * @public
+ * @const
+ * @type {Map}
+ * @name helpers
+ */
 
 export const helpers = new Map();
 
@@ -77,8 +106,25 @@ export default class View extends EventEmitter {
   constructor (template, model = {}) {
     super();
 
+    /**
+     * The template associated with this view.
+     *
+     * @public
+     * @type {Template}
+     * @name template
+     */
+
     this.template = template;
-    this.domElement = dom(this.template.partial(model));
+
+    /**
+     * The DOM Element associated with this view.
+     *
+     * @public
+     * @type {Element}
+     * @name domElement
+     */
+
+    this.domElement = first(dom(this.template.render(model)));
   }
 
   /**
@@ -119,7 +165,7 @@ export default class View extends EventEmitter {
   update (data) {
     const domElement = this.domElement;
     const parser = Parser.sharedInstance();
-    const patch = parser.createPatch(this.template.partial(data));
+    const patch = parser.createPatch(this.template.render(data));
     patch(domElement);
     return this;
   }

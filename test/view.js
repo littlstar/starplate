@@ -4,12 +4,20 @@ const Template = require('../').Template;
 const assert = require('assert');
 const View = require('../').View;
 
-const tpl = new Template('<section>Date <span class="data">${date}</span></section>');
-const view = new View(tpl, {date: Date()});
+const getTime = _ => {
+  const date = new Date();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+  const seconds = date.getSeconds();
+  return `${hours}:${minutes}:${seconds}`;
+};
+
+const tpl = new Template('<section>Time <span class="time">${time}</span></section>');
+const view = new View(tpl, {time: getTime()});
 global.view = view;
 
 view.render();
 
 setInterval(_ => {
-  view.update({date: Date()});
-}, 500);
+  view.update({time: getTime()});
+}, 1000);

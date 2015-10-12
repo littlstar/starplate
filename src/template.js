@@ -128,10 +128,6 @@ export default class Template {
    */
 
   constructor (html) {
-    this.partial = (
-      'function' == typeof html ?
-      html :
-      Template.createPartial(html)
-    );
+    this.render = Template.createPartial(html);
   }
 }

@@ -44,6 +44,7 @@ const ensureFunction = fn => 'function' == typeof fn ? fn : (() => void 0);
  * @extends parse5.Parser
  */
 
+// Parser shared instance
 let instance_ = null;
 export default class Parser extends parse5.Parser {
 
@@ -74,11 +75,23 @@ export default class Parser extends parse5.Parser {
   }
 
   /**
+   * Creates a patch function used for updating
+   * a given DOM Element from the provided source
+   * HTML or DOM Element.
+   *
+   * @public
+   * @method
+   * @name createPatch
+   * @param {String|Element} html
+   * @return {Function} (domElement, [done]) => {Undefined}
    */
 
   createPatch (html) {
-    if (html instanceof HTMLElement)
+    // consume source HTML if an element is given
+    if (html instanceof HTMLElement) {
       html = html.outerHTML;
+    }
+
     const root = this.parseFragment(String(html));
     const nodes = root.children;
     const stack = [];
