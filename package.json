@@ -18,10 +18,10 @@
   "author": "Joseph Werle <werle@littlstar.com>",
   "license": "MIT",
   "dependencies": {
-    "babel-core": "^5.8.25",
     "incremental-dom": "^0.2.0"
   },
   "devDependencies": {
+    "babel-core": "^5.8.25",
     "browserify": "^11.2.0"
   }
 }
