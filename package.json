@@ -1,0 +1,27 @@
+{
+  "name": "starplate",
+  "version": "0.0.1",
+  "description": "View engine built on incremental-dom",
+  "main": "lib/index.js",
+  "preferGlobal": true,
+  "scripts": {
+    "compile": "babel -d lib/ src/",
+    "prepublish": "npm run compile"
+  },
+  "keywords": [
+    "view",
+    "engine",
+    "incremental",
+    "dom",
+    "template"
+  ],
+  "author": "Joseph Werle <werle@littlstar.com>",
+  "license": "MIT",
+  "dependencies": {
+    "babel-core": "^5.8.25",
+    "incremental-dom": "^0.2.0"
+  },
+  "devDependencies": {
+    "browserify": "^11.2.0"
+  }
+}
