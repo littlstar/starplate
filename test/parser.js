@@ -6,29 +6,60 @@
 
 const Parser = require('../').Parser;
 const assert = require('assert');
-const parser = new Parser();
+
+/**
+ * Our Parser instance.
+ */
+
+const parser = Parser.sharedInstance();
+
+/**
+ * Slices an array like object into
+ * an Array instance.
+ */
+
 const slice = o => Array.prototype.slice.call(o);
-const attr = (e, k) => e.getAttribute('k');
-const patchA = parser.createPatch(`
-  <div class="foo">
-    <h3>Title A</h3>
-    <img src="/image-a.png" />
+
+/**
+ * Creates a patch that sets 'Ruler' title
+ * and points to 'ruler.png' image source.
+ */
+
+const rulerPatch = parser.createPatch(`
+  <div class="foo ruler">
+    <h3>Ruler</h3>
+    <img src="/ruler.png" />
   </div>
 `);
 
-const patchB = parser.createPatch(`
-  <div class="foo">
-    <h3>Title A</h3>
-    <img src="/image-b.png" />
+/**
+ * Creates a patch that sets 'Painr Bucket' title
+ * and points to 'paint-bucket.png' image source.
+ */
+
+const paintBucketPatch = parser.createPatch(`
+  <div class="foo paint-bucket">
+    <h3>Paint Bucket</h3>
+    <img src="/paint-bucket.png" />
   </div>
 `);
 
-const patchC = parser.createPatch(`
+/**
+ * Creates a patch that sets 'Chicken in an Egg' title
+ * and points to 'chicken-egg.png' image source.
+ */
+
+const chickenEggPatch = parser.createPatch(`
   <div class="foo">
-    <h3>Title C</h3>
-    <img src="/image-c.png" />
+    <h3>Chicken in an egg</h3>
+    <img src="/chicken-egg.png" />
   </div>
 `);
+
+/**
+ * Naive DOM element creation. This will throw an
+ * error thrown by the DOM.
+ */
 
 const dom = html => {
   const tmp = document.createDocumentFragment();
@@ -39,27 +70,40 @@ const dom = html => {
   return (nodes.length > 1 ? slice(nodes) : nodes[0]) || null;
 };
 
-const domElement = dom(`<section></section>`);
+// DOM element instance
+const domElement = dom(`
+  <section>
+    <div class="foo">
+      <h3></h3>
+      <img src="" />
+    </div>
+  </section>
+`);
 
-// sanity checks
+// known patches array
+const patches = [
+  rulerPatch,
+  paintBucketPatch,
+  chickenEggPatch,
+];
+
+// current patch index
+let currentPatchIndex = 0;
+
+// render DOM element
 document.body.appendChild(domElement);
-patchA(domElement);
 
+// initial DOM state
 const foo = domElement.querySelector('.foo');
-let h3 = domElement.querySelector('h3');
+const h3 = domElement.querySelector('h3');
+
+// duh...
 assert(foo);
 assert(h3);
 
-setTimeout(_ => {
-  patchB(domElement);
-  h3 = domElement.querySelector('h3');
-  assert(h3);
-  assert(foo == domElement.querySelector('.foo'));
+// apply new patch every second
+setInterval(_ => {
+  const index = currentPatchIndex++ % patches.length;
+  const patch = patches[index];
+  patch(domElement);
 }, 1000);
-
-setTimeout(_ => {
-  patchC(domElement);
-  assert(h3 == domElement.querySelector('h3'));
-  assert(foo == domElement.querySelector('.foo'));
-}, 2000);
-
