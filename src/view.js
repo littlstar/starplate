@@ -4,7 +4,13 @@
  * Module dependencies.
  */
 
-import EventEmitter from 'events';
+let EventEmitter = null;
+try {
+  EventEmitter = require('events').EventEmitter;
+} catch (e) {
+  EventEmitter = require('component/emitter');
+}
+
 import Template from './template';
 import Parser from './parser';
 

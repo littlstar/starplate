@@ -36,7 +36,7 @@ test: $(TESTS)
 # Build test for web execution
 .PHONY: $(TESTS)
 $(TESTS): $(NODE_MODULES)
-	$(BROWSERIFY) -s _ $@ -t babelify -o test/web/$(notdir $(@:.js=))/build.js
+	$(BROWSERIFY) --im -s _ $@ -t babelify -o test/web/$(notdir $(@:.js=))/build.js
 
 ##
 # Create dist build
@@ -44,6 +44,10 @@ $(TESTS): $(NODE_MODULES)
 dist:
 	mkdir -p $(@)
 	$(NPM) run compile
-	$(BROWSERIFY) -s $(STANDALONE) -t babelify lib/index.js -o $@/$(STANDALONE).js
+	$(BROWSERIFY) --im -s $(STANDALONE) -t babelify lib/index.js -o $@/$(STANDALONE).js
 	$(UGLIFY) --compress --mangle --output $@/$(STANDALONE).js -- $@/$(STANDALONE).js
 
+clean:
+	$(RM) -rf lib/
+	$(RM) -rf components/
+	$(RM) -rf node_modules/

@@ -4,14 +4,22 @@
  * Module dependencies.
  */
 
-import parse5 from 'parse5';
-import {
-  text,
-  patch,
-  elementVoid,
-  elementOpen,
-  elementClose,
-} from 'incremental-dom';
+let incrementalDOM = null;
+let parse5 = null;
+
+try {
+  parse5 = require('parse5');
+  incrementalDOM = require('incremental-dom');
+} catch (e) {
+  parse5 = require('inikulin/parse5');
+  incrementalDOM = require('google/incremental-dom');
+}
+
+const text = incrementalDOM.text;
+const patch = incrementalDOM.patch;
+const elementVoid = incrementalDOM.elementVoid;
+const elementOpen = incrementalDOM.elementOpen;
+const elementClose = incrementalDOM.elementClose;
 
 /**
  * Generates a random unique hex ID string.

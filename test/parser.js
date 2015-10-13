@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 
-const Parser = require('../').Parser;
+const Parser = require('..').Parser;
 const assert = require('assert');
 
 /**
