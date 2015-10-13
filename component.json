@@ -1,7 +1,7 @@
 {
   "name": "starplate",
   "repo": "littlstar/starplate",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "View engine built on incremental-dom",
   "main": "src/index.js",
   "scripts": [
