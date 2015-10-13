@@ -47,10 +47,20 @@ latest standalone build from the [dist/](dist/) directory.
 
 The Starplate API is defined in the `'starplate'` module.
 
+#### CommonJS
+
 ```js
 const Template = require('starplate').Template;
 const Parser = require('starplate').Parser;
 const View = require('starplate').View;
+```
+
+#### Duo
+
+```js
+const Template = require('littlstar/starplate').Template;
+const Parser = require('littlstar/starplate').Parser;
+const View = require('littlstar/starplate').View;
 ```
 
 ### Browser/Standalone
