@@ -1,6 +1,6 @@
 # Starplate
 
-Starplate is a lightening fast template and view engine built on top of
+Starplate is a lightning fast template and view engine built on top of
 [incremental-dom](https://github.com/google/incremental-dom) and Babel.
 Think ES6 Templates + Incremental DOM working
 together. DOM travseral is made possible with
