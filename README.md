@@ -99,7 +99,7 @@ console.log(str); // Goodbye kinkajou
 
 A `View` instance represents an API to interacting with a DOM tree.
 [Incremental-DOM](https://github.com/google/incremental-dom) manages DOM
-rendering and updates which gives Starplate its performance. Updates
+rendering and updates which gives Starplate its performance.
 
 ### Parser
 
