@@ -72,6 +72,16 @@ export default class Parser extends parse5.Parser {
 
   constructor () {
     super(parse5.TreeAdapters.htmlparser2);
+
+    /**
+     * Known patches for this parser state.
+     *
+     * @public
+     * @type {Map}
+     * @name patches
+     */
+
+    this.patches = new Map();
   }
 
   /**
@@ -82,14 +92,21 @@ export default class Parser extends parse5.Parser {
    * @public
    * @method
    * @name createPatch
-   * @param {String|Element} html
+   * @param {String|Element} source
    * @return {Function} (domElement, [done]) => {Undefined}
    */
 
-  createPatch (html) {
+  createPatch (source) {
+    let html = source;
+
+    // get cached patch if diff doesn't exist
+    if (!this.hasPatch(source)) {
+      return this.getPatch(source);
+    }
+
     // consume source HTML if an element is given
-    if (html instanceof HTMLElement) {
-      html = html.outerHTML;
+    if (source instanceof HTMLElement) {
+      html = source.outerHTML;
     }
 
     const root = this.parseFragment(String(html));
@@ -136,29 +153,35 @@ export default class Parser extends parse5.Parser {
       const hasChildren = Boolean(node.children ? node.children.length : 0);
 
       // skip lingering text
-      if ('root' == parent.type && 'text' == node.type) {
+      if ('root' == parent.type && 'text' == node.type)
         return;
-      }
+
+      if (attrs && Object.keys(attrs).length)
+        for (let key in attrs) kv.push(key, attrs[key]);
 
       if ('tag' == node.type) {
-        if (Object.keys(attrs).length) {
-          for (let key in attrs) kv.push(key, attrs[key]);
-        }
+        // begin node
         createInstruction(_ => elementOpen(node.name, id, null, ...kv));
-        if (hasChildren) {
+
+        // define child nodes
+        if (hasChildren)
           node.children.forEach(traverse);
-        }
+
+        // close node
         createInstruction(_ => elementClose(node.name));
       } else if ('text' == node.type) {
+        // handle text nodes
         createInstruction(_ => text(node.data));
       } else {
+        // @TODO(werle) - what else ?
         throw new TypeError(`Unhandled node type ${node.type}.`);
       }
     };
 
     // Walk tree and generate
     // incremental DOM routines
-    for (let node of nodes) traverse(node);
+    for (let node of nodes)
+      traverse(node);
 
     /**
      * Patch routine for a given DOM Element.
@@ -169,12 +192,47 @@ export default class Parser extends parse5.Parser {
      * @param {Function} [done]
      */
 
-    return (domElement, done) => {
+    const partial = (domElement, done) => {
       done = ensureFunction(done);
       patch(domElement, _ => {
         stack.forEach(routine => routine());
         done();
       });
     };
+
+    // set patch
+    this.patches.set(source, patch);
+
+    // provide partial patch function
+    return partial;
+  }
+
+  /**
+   * Predicate to determine if source given
+   * is an already defined patch.
+   *
+   * @public
+   * @method
+   * @name hasPatch
+   * @param {Mixed} source
+   * @return {Boolean}
+   */
+
+  hasPatch (source) {
+    return false == this.patches.has(source);
+  }
+
+  /**
+   * Returns patch by source.
+   *
+   * @public
+   * @method
+   * @name getPatch
+   * @param {Mixed} source
+   * @return {Function}
+   */
+
+  getPatch (source) {
+    return this.patches.get(source) || null;
   }
 }
