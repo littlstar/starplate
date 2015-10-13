@@ -4,17 +4,20 @@
  * Module dependencies.
  */
 
-let incrementalDOM = null;
-let parse5 = null;
+let { incrementalDOM , parse5 } = (function() {
+  let parse5 = null;
+  let incrementalDOM = null;
 
-try {
-  parse5 = require('parse5');
-  incrementalDOM = require('incremental-dom');
-} catch (e) {
-  parse5 = require('inikulin/parse5');
-  // @TODO - incremental-dom to support duo (component.json)
-  incrementalDOM = require('littlstar/incremental-dom@master');
-}
+  try {
+    parse5 = require('parse5');
+    incrementalDOM = require('incremental-dom');
+  } catch (e) {
+    parse5 = require('inikulin/parse5');
+    // @TODO - incremental-dom to support duo (component.json)
+    incrementalDOM = require('littlstar/incremental-dom@master');
+  }
+  return { incrementalDOM, parse5 }
+})();
 
 const text = incrementalDOM.text;
 const patch = incrementalDOM.patch;
