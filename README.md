@@ -91,6 +91,21 @@ A `View` instance represents an API to interacting with a DOM tree.
 [Incremental-DOM](https://github.com/google/incremental-dom) manages DOM
 rendering and updates which gives Starplate its performance. Updates
 
+### Parser
+
+A `Parser` is a low level way of parsing a HTML string or DOM element
+source into a patch for DOM element. A `Parser` instance is generally
+shared across this library. You can get a `Parser` instance by calling
+the static method `Parser.sharedInstance()`. A new instance may of
+course by created by the `new Parser()` expression.
+
+```js
+const domElement = document.querySelector('#my-dom-element');
+const parser = Parser.sharedInstance();
+const patch = parser.createPatch('<div class="foo">patch</div>');
+patch(domElement);
+```
+
 ## Example
 
 ```js
