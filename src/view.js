@@ -5,6 +5,7 @@
  */
 
 let EventEmitter = null;
+
 try {
   EventEmitter = require('events').EventEmitter;
 } catch (e) {

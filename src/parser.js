@@ -12,7 +12,8 @@ try {
   incrementalDOM = require('incremental-dom');
 } catch (e) {
   parse5 = require('inikulin/parse5');
-  incrementalDOM = require('google/incremental-dom');
+  // @TODO - incremental-dom to support duo (component.json)
+  incrementalDOM = require('littlstar/incremental-dom@master');
 }
 
 const text = incrementalDOM.text;
