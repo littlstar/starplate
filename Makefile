@@ -18,7 +18,7 @@ TESTS := $(wildcard test/*.js)
 
 ##
 # uglifyjs bin path
-UGLIFY := $(BIN)/uglifyjs
+UGLIFY := $(NODE_MODULES)/.bin/uglifyjs
 
 ##
 # npm bin path
@@ -36,7 +36,7 @@ test: $(TESTS)
 # Build test for web execution
 .PHONY: $(TESTS)
 $(TESTS): $(NODE_MODULES)
-	$(BROWSERIFY) -s _ $@ -o test/web/$(notdir $(@:.js=))/build.js
+	$(BROWSERIFY) -s _ $@ -t babelify -o test/web/$(notdir $(@:.js=))/build.js
 
 ##
 # Create dist build
@@ -44,6 +44,6 @@ $(TESTS): $(NODE_MODULES)
 dist:
 	mkdir -p $(@)
 	$(NPM) run compile
-	$(BROWSERIFY) -s $(STANDALONE) lib/index.js -o $@/$(STANDALONE).js
+	$(BROWSERIFY) -s $(STANDALONE) -t babelify lib/index.js -o $@/$(STANDALONE).js
 	$(UGLIFY) --compress --mangle --output $@/$(STANDALONE).js -- $@/$(STANDALONE).js
 

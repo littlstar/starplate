@@ -41,6 +41,7 @@ const dom = html => {
 
 const domElement = dom(`<section></section>`);
 
+// sanity checks
 document.body.appendChild(domElement);
 patchA(domElement);
 

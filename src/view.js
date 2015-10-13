@@ -169,11 +169,27 @@ export default class View extends EventEmitter {
    */
 
   update (data) {
+    this.patch(this.template.render(data));
+    return this;
+  }
+
+  /**
+   * Patches view DOM tree with source string
+   * or a given DOM Element.
+   *
+   * @public
+   * @method
+   * @name patch
+   * @param {String|Element} source
+   * @return {View}
+   */
+
+  patch (source) {
     const domElement = this.domElement;
     const parser = Parser.sharedInstance();
-    const patch = parser.createPatch(this.template.render(data));
+    const patch = parser.createPatch(source);
     patch(domElement);
-    return this;
+    return this
   }
 
   /**

@@ -108,6 +108,13 @@ export default class Template {
 
       header = `var ${header.join(', ')};`;
 
+      // allow use of #{} inside of ES6 template strings
+      // defined with `. ie -
+      // const person = 'joe';
+      // const str = `Hello #{name}, ${person} says helloo';
+      if ('string' == typeof string) {
+        string = string.replace(/\#\{/g, '${');
+      }
 
       if ('function' != typeof wrap) {
         wrap = new Function('data', `'use strict'; ${header} return \`${string}\``);
