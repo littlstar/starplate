@@ -50,12 +50,16 @@ let h3 = domElement.querySelector('h3');
 assert(foo);
 assert(h3);
 
-patchB(domElement);
-h3 = domElement.querySelector('h3');
-assert(h3);
-assert(foo == domElement.querySelector('.foo'));
+setTimeout(_ => {
+  patchB(domElement);
+  h3 = domElement.querySelector('h3');
+  assert(h3);
+  assert(foo == domElement.querySelector('.foo'));
+}, 1000);
 
-patchC(domElement);
-assert(h3 == domElement.querySelector('h3'));
-assert(foo == domElement.querySelector('.foo'));
+setTimeout(_ => {
+  patchC(domElement);
+  assert(h3 == domElement.querySelector('h3'));
+  assert(foo == domElement.querySelector('.foo'));
+}, 2000);
 
