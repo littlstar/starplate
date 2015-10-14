@@ -4,13 +4,14 @@
  * Module dependencies.
  */
 
-let EventEmitter = null;
 
-try {
-  EventEmitter = require('events').EventEmitter;
-} catch (e) {
-  EventEmitter = require('component/emitter');
-}
+let EventEmitter = (function() {
+  try {
+    return require('events').EventEmitter;
+  } catch (e) {
+    return require('component/emitter');
+  }
+})();
 
 import Template from './template';
 import Parser from './parser';
