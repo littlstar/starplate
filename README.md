@@ -25,7 +25,7 @@ A generated view template partial may look like this:
 
 ```js
 const partial = function () {
-  var name = 'joe';
+  var name = 'kinkajou';
   return `<span>Hello ${name}</span>`;
 }
 ```
