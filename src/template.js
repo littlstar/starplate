@@ -106,7 +106,10 @@ export default class Template {
       for (let kv of helpers.entries())
         header.push(`${kv[0]} = ${makeSafeObject(kv[1])}`);
 
-      header = `var ${header.join(', ')};`;
+      if (header.length)
+        header = `var ${header.join(', ')};`;
+      else
+        header = '';
 
       // allow use of #{} inside of ES6 template strings
       // defined with `. ie -
