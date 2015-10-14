@@ -192,8 +192,7 @@ export default class Parser extends parse5.Parser {
 
     // Walk tree and generate
     // incremental DOM routines
-    for (let node of nodes)
-      traverse(node);
+    nodes.forEach(traverse)
 
     /**
      * Patch routine for a given DOM Element.
