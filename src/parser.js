@@ -14,7 +14,7 @@ let { incrementalDOM , parse5 } = (function() {
   } catch (e) {
     parse5 = require('inikulin/parse5');
     // @TODO - incremental-dom to support duo (component.json)
-    incrementalDOM = require('littlstar/incremental-dom@master');
+    incrementalDOM = require('littlstar/incremental-dom@component');
   }
   return { incrementalDOM, parse5 }
 })();
