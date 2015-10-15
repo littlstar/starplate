@@ -1,6 +1,6 @@
 {
   "name": "starplate",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "View engine built on incremental-dom",
   "main": "lib/index.js",
   "preferGlobal": true,
