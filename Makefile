@@ -45,7 +45,7 @@ dist:
 	mkdir -p $(@)
 	$(NPM) run compile
 	$(BROWSERIFY) --im -s $(STANDALONE) -t babelify lib/index.js -o $@/$(STANDALONE).js
-	$(UGLIFY) --compress --mangle --output $@/$(STANDALONE).js -- $@/$(STANDALONE).js
+	$(UGLIFY) --compress --mangle --output $@/$(STANDALONE).min.js -- $@/$(STANDALONE).js
 
 clean:
 	$(RM) -rf lib/
