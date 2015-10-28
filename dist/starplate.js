@@ -242,6 +242,25 @@ var Parser = (function (_parse5$Parser) {
       };
 
       /**
+       * Patch routine for a given DOM Element.
+       *
+       * @public
+       * @function
+       * @param {Element} domElement
+       * @param {Function} [done]
+       */
+
+      var partial = function partial(domElement, done) {
+        done = ensureFunction(done);
+        (0, _incrementalDom.patch)(domElement, function (_) {
+          stack.forEach(function (routine) {
+            return routine();
+          });
+          done();
+        });
+      };
+
+      /**
        * Traverse node recursively appending
        * instructions to stack.
        *
@@ -251,7 +270,7 @@ var Parser = (function (_parse5$Parser) {
        * @param {Object} node
        */
 
-      var traverse = function traverse(node) {
+      function traverse(node) {
         var kv = [];
         var id = node.attribs ? node.attribs.id : uid();
         var attrs = node.attribs;
@@ -290,25 +309,6 @@ var Parser = (function (_parse5$Parser) {
       // Walk tree and generate
       // incremental DOM routines
       nodes.forEach(traverse);
-
-      /**
-       * Patch routine for a given DOM Element.
-       *
-       * @public
-       * @function
-       * @param {Element} domElement
-       * @param {Function} [done]
-       */
-
-      var partial = function partial(domElement, done) {
-        done = ensureFunction(done);
-        (0, _incrementalDom.patch)(domElement, function (_) {
-          stack.forEach(function (routine) {
-            return routine();
-          });
-          done();
-        });
-      };
 
       // set patch
       this.patches.set(source, _incrementalDom.patch);
