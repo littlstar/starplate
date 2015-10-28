@@ -29,7 +29,7 @@ const ensureObject = o => null != o && 'object' == typeof o ? o : {};
  * @return {Mixed}
  */
 
-const makeSafeObject = o => {
+function makeSafeObject (o) {
   let out = String();
 
   if ('function' == typeof o) {

@@ -4,26 +4,14 @@
  * Module dependencies.
  */
 
-let { incrementalDOM , parse5 } = (function() {
-  let parse5 = null;
-  let incrementalDOM = null;
-
-  try {
-    parse5 = require('parse5');
-    incrementalDOM = require('incremental-dom');
-  } catch (e) {
-    parse5 = require('inikulin/parse5');
-    // @TODO - incremental-dom to support duo (component.json)
-    incrementalDOM = require('littlstar/incremental-dom@component');
-  }
-  return { incrementalDOM, parse5 }
-})();
-
-const text = incrementalDOM.text;
-const patch = incrementalDOM.patch;
-const elementVoid = incrementalDOM.elementVoid;
-const elementOpen = incrementalDOM.elementOpen;
-const elementClose = incrementalDOM.elementClose;
+import parse5 from 'parse5';
+import {
+  text,
+  patch,
+  elementVoid,
+  elementOpen,
+  elementClose
+} from 'incremental-dom';
 
 /**
  * Generates a random unique hex ID string.

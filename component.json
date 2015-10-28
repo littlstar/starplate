@@ -4,14 +4,18 @@
   "version": "0.0.9",
   "description": "View engine built on incremental-dom",
   "main": "src/index.js",
+  "author": "Joseph Werle <werle@littlstar.com>",
+  "license": "MIT",
   "scripts": [
     "src/index.js",
     "src/view.js",
     "src/parser.js",
     "src/template.js"
   ],
-  "author": "Joseph Werle <werle@littlstar.com>",
-  "license": "MIT",
+  "dependencies": {
+    "littlstar/incremental-dom@component": "*",
+    "inikulin/parse5": "*"
+  },
   "keywords": [
     "view",
     "engine",
