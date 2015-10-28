@@ -136,6 +136,23 @@ export default class Parser extends parse5.Parser {
     const render = _ => stack.forEach(routine => routine());
 
     /**
+     * Patch routine for a given DOM Element.
+     *
+     * @public
+     * @function
+     * @param {Element} domElement
+     * @param {Function} [done]
+     */
+
+    const partial = (domElement, done) => {
+      done = ensureFunction(done);
+      patch(domElement, _ => {
+        stack.forEach(routine => routine());
+        done();
+      });
+    };
+
+    /**
      * Traverse node recursively appending
      * instructions to stack.
      *
@@ -145,7 +162,7 @@ export default class Parser extends parse5.Parser {
      * @param {Object} node
      */
 
-    const traverse = node => {
+    function traverse (node) {
       const kv = [];
       const id = node.attribs ? node.attribs.id : uid();
       const attrs = node.attribs;
@@ -181,23 +198,6 @@ export default class Parser extends parse5.Parser {
     // Walk tree and generate
     // incremental DOM routines
     nodes.forEach(traverse)
-
-    /**
-     * Patch routine for a given DOM Element.
-     *
-     * @public
-     * @function
-     * @param {Element} domElement
-     * @param {Function} [done]
-     */
-
-    const partial = (domElement, done) => {
-      done = ensureFunction(done);
-      patch(domElement, _ => {
-        stack.forEach(routine => routine());
-        done();
-      });
-    };
 
     // set patch
     this.patches.set(source, patch);
