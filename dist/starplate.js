@@ -58,11 +58,11 @@ var _get = function get(_x, _x2, _x3) {
   var _again = true;_function: while (_again) {
     var object = _x,
         property = _x2,
-        receiver = _x3;desc = parent = getter = undefined;_again = false;if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+        receiver = _x3;_again = false;if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
       var parent = Object.getPrototypeOf(object);if (parent === null) {
         return undefined;
       } else {
-        _x = parent;_x2 = property;_x3 = receiver;_again = true;continue _function;
+        _x = parent;_x2 = property;_x3 = receiver;_again = true;desc = parent = undefined;continue _function;
       }
     } else if ('value' in desc) {
       return desc.value;
@@ -620,11 +620,11 @@ var _get = function get(_x3, _x4, _x5) {
   var _again = true;_function: while (_again) {
     var object = _x3,
         property = _x4,
-        receiver = _x5;desc = parent = getter = undefined;_again = false;if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
+        receiver = _x5;_again = false;if (object === null) object = Function.prototype;var desc = Object.getOwnPropertyDescriptor(object, property);if (desc === undefined) {
       var parent = Object.getPrototypeOf(object);if (parent === null) {
         return undefined;
       } else {
-        _x3 = parent;_x4 = property;_x5 = receiver;_again = true;continue _function;
+        _x3 = parent;_x4 = property;_x5 = receiver;_again = true;desc = parent = undefined;continue _function;
       }
     } else if ('value' in desc) {
       return desc.value;
