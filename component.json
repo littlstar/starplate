@@ -13,7 +13,7 @@
     "src/template.js"
   ],
   "dependencies": {
-    "littlstar/incremental-dom": "component",
+    "google/incremental-dom": "*",
     "inikulin/parse5": "*"
   },
   "keywords": [
