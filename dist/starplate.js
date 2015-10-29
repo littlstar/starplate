@@ -311,7 +311,7 @@ var Parser = (function (_parse5$Parser) {
       nodes.forEach(traverse);
 
       // set patch
-      this.patches.set(source, _incrementalDom.patch);
+      this.patches.set(source, partial);
 
       // provide partial patch function
       return partial;
