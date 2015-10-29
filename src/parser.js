@@ -200,7 +200,7 @@ export default class Parser extends parse5.Parser {
     nodes.forEach(traverse)
 
     // set patch
-    this.patches.set(source, patch);
+    this.patches.set(source, partial);
 
     // provide partial patch function
     return partial;
