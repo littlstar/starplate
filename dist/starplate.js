@@ -106,7 +106,7 @@ var _incrementalDom = require('incremental-dom');
  */
 
 var uid = function uid(_) {
-  return Math.abs(Math.random() * Date.now() | 0).toString('16');
+  return Math.abs(Math.random() * Date.now() | 1).toString('16');
 };
 
 /**
@@ -277,9 +277,6 @@ var Parser = (function (_parse5$Parser) {
         var parent = node.parent;
         var hasChildren = Boolean(node.children ? node.children.length : 0);
 
-        // skip lingering text
-        if ('root' == parent.type && 'text' == node.type) return;
-
         if (attrs && Object.keys(attrs).length) for (var key in attrs) {
           kv.push(key, attrs[key]);
         }if ('tag' == node.type) {
@@ -295,7 +292,7 @@ var Parser = (function (_parse5$Parser) {
           createInstruction(function (_) {
             return (0, _incrementalDom.elementClose)(node.name);
           });
-        } else if ('text' == node.type) {
+        } else if ('text' == node.type && node.data) {
           // handle text nodes
           createInstruction(function (_) {
             return (0, _incrementalDom.text)(node.data);
@@ -736,6 +733,24 @@ var dom = function dom(html) {
 };
 
 /**
+ * Deep merge objects
+ *
+ * @private
+ * @function
+ * @name merge
+ * @param {Object} a
+ * @param {Object} b
+ * @return {Object}
+ */
+
+var merge = function merge(a, b) {
+  for (var k in b) {
+    if ('object' == typeof b[k] && 'object' == typeof a[k]) merge(a[k], b[k]);else a[k] = b[k];
+  }
+  return a;
+};
+
+/**
  * Known view helpers defined with View.helper().
  *
  * @public
@@ -816,6 +831,16 @@ var View = (function (_EventEmitter) {
     }
 
     /**
+     * View data model.
+     *
+     * @public
+     * @type {Object}
+     * @name model
+     */
+
+    this.model = model || {};
+
+    /**
      * The template associated with this view.
      *
      * @public
@@ -833,7 +858,7 @@ var View = (function (_EventEmitter) {
      * @name domElement
      */
 
-    this.domElement = first(dom(this.template.render(model)));
+    this.domElement = first(dom(this.template.render(this.model)));
   }
 
   /**
@@ -878,7 +903,7 @@ var View = (function (_EventEmitter) {
   }, {
     key: 'update',
     value: function update(data) {
-      this.patch(dom(this.template.render(data)));
+      this.patch(dom(this.template.render(merge(this.model, data || {}))));
       return this;
     }
 
