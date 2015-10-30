@@ -109,7 +109,8 @@ export default class Parser extends parse5.Parser {
       html = source.innerHTML;
     }
 
-    const root = this.parseFragment(String(html));
+    html = String(html).replace(/\n/g, ' ').replace(/\r/g, ' ');
+    const root = this.parseFragment(html);
     const nodes = root.children;
     const stack = [];
 

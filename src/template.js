@@ -37,6 +37,10 @@ function makeSafeObject (o) {
   }
 
   if (null == o || 'object' != typeof o) {
+    if ('string' == typeof o) {
+      try { return JSON.stringify(JSON.parse(o)); }
+      catch (e) {}
+    }
     return JSON.stringify(o);
   }
 
