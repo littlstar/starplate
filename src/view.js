@@ -52,6 +52,28 @@ const dom = html => {
 };
 
 /**
+ * Deep merge objects
+ *
+ * @private
+ * @function
+ * @name merge
+ * @param {Object} a
+ * @param {Object} b
+ * @return {Object}
+ */
+
+const merge = (a, b) => {
+  for (let k in b) {
+    if ('object' == typeof b[k] &&
+        'object' == typeof a[k])
+      merge(a[k], b[k]);
+    else
+      a[k] = b[k];
+  }
+  return a;
+};
+
+/**
  * Known view helpers defined with View.helper().
  *
  * @public
@@ -121,6 +143,16 @@ export default class View extends EventEmitter {
     }
 
     /**
+     * View data model.
+     *
+     * @public
+     * @type {Object}
+     * @name model
+     */
+
+    this.model = model || {};
+
+    /**
      * The template associated with this view.
      *
      * @public
@@ -138,7 +170,7 @@ export default class View extends EventEmitter {
      * @name domElement
      */
 
-    this.domElement = first(dom(this.template.render(model)));
+    this.domElement = first(dom(this.template.render(this.model)));
   }
 
   /**
@@ -177,7 +209,7 @@ export default class View extends EventEmitter {
    */
 
   update (data) {
-    this.patch(dom(this.template.render(data)));
+    this.patch(dom(this.template.render(merge(this.model, data || {}))));
     return this;
   }
 

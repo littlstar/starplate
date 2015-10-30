@@ -22,7 +22,7 @@ import {
  * @return {String}
  */
 
-const uid = _ => Math.abs(Math.random() * Date.now()|0).toString('16');
+const uid = _ => Math.abs(Math.random() * Date.now()|1).toString('16');
 
 /**
  * Ensures a function.
@@ -169,10 +169,6 @@ export default class Parser extends parse5.Parser {
       const parent = node.parent;
       const hasChildren = Boolean(node.children ? node.children.length : 0);
 
-      // skip lingering text
-      if ('root' == parent.type && 'text' == node.type)
-        return;
-
       if (attrs && Object.keys(attrs).length)
         for (let key in attrs) kv.push(key, attrs[key]);
 
@@ -186,7 +182,7 @@ export default class Parser extends parse5.Parser {
 
         // close node
         createInstruction(_ => elementClose(node.name));
-      } else if ('text' == node.type) {
+      } else if ('text' == node.type && node.data) {
         // handle text nodes
         createInstruction(_ => text(node.data));
       } else {
