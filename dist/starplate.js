@@ -587,6 +587,36 @@ var Template = (function () {
       this.render = Template.createPartial(source);
       return this;
     }
+
+    /**
+     * Implements toString.
+     *
+     * @public
+     * @method
+     * @name toString
+     * @return {String}
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString() {
+      return String(this.source || '');
+    }
+
+    /**
+     * Implements valueOf.
+     *
+     * @public
+     * @method
+     * @name valueOf
+     * @return {Element}
+     */
+
+  }, {
+    key: 'valueOf',
+    value: function valueOf() {
+      return this.source;
+    }
   }]);
 
   return Template;
@@ -893,6 +923,36 @@ var View = (function (_EventEmitter) {
         }
       }
       return this;
+    }
+
+    /**
+     * Implements toString.
+     *
+     * @public
+     * @method
+     * @name toString
+     * @return {String}
+     */
+
+  }, {
+    key: 'toString',
+    value: function toString() {
+      return String(this.domElement ? this.domElement.outerHTML || '' : '');
+    }
+
+    /**
+     * Implements valueOf.
+     *
+     * @public
+     * @method
+     * @name valueOf
+     * @return {Element}
+     */
+
+  }, {
+    key: 'valueOf',
+    value: function valueOf() {
+      return this.domElement;
     }
   }]);
 
