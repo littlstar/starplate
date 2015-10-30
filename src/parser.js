@@ -106,7 +106,7 @@ export default class Parser extends parse5.Parser {
 
     // consume source HTML if an element is given
     if (source instanceof HTMLElement) {
-      html = source.outerHTML;
+      html = source.innerHTML;
     }
 
     const root = this.parseFragment(String(html));

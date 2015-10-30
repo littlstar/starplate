@@ -177,7 +177,7 @@ export default class View extends EventEmitter {
    */
 
   update (data) {
-    this.patch(this.template.render(data));
+    this.patch(dom(this.template.render(data)));
     return this;
   }
 
