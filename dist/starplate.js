@@ -206,7 +206,7 @@ var Parser = (function (_parse5$Parser) {
 
       // consume source HTML if an element is given
       if (source instanceof HTMLElement) {
-        html = source.outerHTML;
+        html = source.innerHTML;
       }
 
       var root = this.parseFragment(String(html));
@@ -878,7 +878,7 @@ var View = (function (_EventEmitter) {
   }, {
     key: 'update',
     value: function update(data) {
-      this.patch(this.template.render(data));
+      this.patch(dom(this.template.render(data)));
       return this;
     }
 
