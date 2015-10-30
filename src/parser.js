@@ -171,7 +171,9 @@ export default class Parser extends parse5.Parser {
       const hasChildren = Boolean(node.children ? node.children.length : 0);
 
       if (attrs && Object.keys(attrs).length)
-        for (let key in attrs) kv.push(key, attrs[key]);
+        for (let key in attrs)
+          if (attrs[key])
+            kv.push(key, attrs[key]);
 
       if ('tag' == node.type) {
         // begin node
