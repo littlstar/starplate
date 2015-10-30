@@ -209,7 +209,8 @@ var Parser = (function (_parse5$Parser) {
         html = source.innerHTML;
       }
 
-      var root = this.parseFragment(String(html));
+      html = String(html).replace(/\n/g, ' ').replace(/\r/g, ' ');
+      var root = this.parseFragment(html);
       var nodes = root.children;
       var stack = [];
 
@@ -278,7 +279,7 @@ var Parser = (function (_parse5$Parser) {
         var hasChildren = Boolean(node.children ? node.children.length : 0);
 
         if (attrs && Object.keys(attrs).length) for (var key in attrs) {
-          kv.push(key, attrs[key]);
+          if (attrs[key]) kv.push(key, attrs[key]);
         }if ('tag' == node.type) {
           // begin node
           createInstruction(function (_) {
@@ -416,6 +417,11 @@ function makeSafeObject(o) {
   }
 
   if (null == o || 'object' != typeof o) {
+    if ('string' == typeof o) {
+      try {
+        return JSON.stringify(JSON.parse(o));
+      } catch (e) {}
+    }
     return JSON.stringify(o);
   }
 
