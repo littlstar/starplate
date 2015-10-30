@@ -179,4 +179,30 @@ export default class Template {
     this.render = Template.createPartial(source);
     return this;
   }
+
+  /**
+   * Implements toString.
+   *
+   * @public
+   * @method
+   * @name toString
+   * @return {String}
+   */
+
+  toString () {
+    return String(this.source || '');
+  }
+
+  /**
+   * Implements valueOf.
+   *
+   * @public
+   * @method
+   * @name valueOf
+   * @return {Element}
+   */
+
+  valueOf () {
+    return this.source;
+  }
 }

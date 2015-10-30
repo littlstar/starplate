@@ -219,4 +219,30 @@ export default class View extends EventEmitter {
     }
     return this;
   }
+
+  /**
+   * Implements toString.
+   *
+   * @public
+   * @method
+   * @name toString
+   * @return {String}
+   */
+
+  toString () {
+    return String(this.domElement ? this.domElement.outerHTML || '' : '');
+  }
+
+  /**
+   * Implements valueOf.
+   *
+   * @public
+   * @method
+   * @name valueOf
+   * @return {Element}
+   */
+
+  valueOf () {
+    return this.domElement;
+  }
 }
