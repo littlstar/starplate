@@ -751,9 +751,23 @@ var dom = function dom(html) {
 
 var merge = function merge(a, b) {
   for (var k in b) {
-    if ('object' == typeof b[k] && 'object' == typeof a[k]) merge(a[k], b[k]);else a[k] = b[k];
+    if ('object' == typeof b[k] && 'object' == typeof a[k]) merge(a[k], b[k]);else if ('object' == typeof b[k]) a[k] = merge(Array.isArray(b[k]) ? [] : {}, b[k]);else a[k] = b[k];
   }
   return a;
+};
+
+/**
+ * Clone object
+ *
+ * @private
+ * @function
+ * @name clone
+ * @param {Object} a
+ * @return {Object}
+ */
+
+var clone = function clone(a) {
+  return merge(Array.isArray(a) ? [] : {}, a);
 };
 
 /**
@@ -909,7 +923,8 @@ var View = (function (_EventEmitter) {
   }, {
     key: 'update',
     value: function update(data) {
-      this.patch(dom(this.template.render(merge(this.model, data || {}))));
+      this.model = merge(this.model || {}, data || {});
+      this.patch(dom(this.template.render(clone(this.model))));
       return this;
     }
 
