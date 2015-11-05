@@ -428,13 +428,18 @@ function makeSafeObject(o) {
   if ('object' == typeof o) {
     for (var k in o) {
       o[k] = makeSafeObject(o[k]);
+    }if (Array.isArray(o)) {
+      out += '[';
+      for (var k in o) {
+        out += o[k] + ', ';
+      }out += ']';
+    } else {
+      out += '{';
+      for (var k in o) {
+        out += k + ': ' + o[k] + ', ';
+      }out += '}';
     }
   }
-
-  out += '{';
-  for (var k in o) {
-    out += k + ': ' + o[k] + ', ';
-  }out += '}';
 
   return out;
 }

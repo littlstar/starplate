@@ -2,7 +2,7 @@
   "name": "starplate",
   "repo": "littlstar/starplate",
   "description": "View engine built on incremental-dom",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "main": "src/index.js",
   "author": "Joseph Werle <werle@littlstar.com>",
   "license": "MIT",
