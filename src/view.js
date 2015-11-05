@@ -67,11 +67,25 @@ const merge = (a, b) => {
     if ('object' == typeof b[k] &&
         'object' == typeof a[k])
       merge(a[k], b[k]);
+    else if ('object' == typeof b[k])
+      a[k] = merge(Array.isArray(b[k]) ? [] : {}, b[k]);
     else
       a[k] = b[k];
   }
   return a;
 };
+
+/**
+ * Clone object
+ *
+ * @private
+ * @function
+ * @name clone
+ * @param {Object} a
+ * @return {Object}
+ */
+
+const clone = a => merge(Array.isArray(a) ? [] : {}, a);
 
 /**
  * Known view helpers defined with View.helper().
@@ -209,7 +223,8 @@ export default class View extends EventEmitter {
    */
 
   update (data) {
-    this.patch(dom(this.template.render(merge(this.model, data || {}))));
+    this.model = merge(this.model || {}, data || {});
+    this.patch(dom(this.template.render(clone(this.model))));
     return this;
   }
 
