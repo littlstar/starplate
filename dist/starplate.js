@@ -298,10 +298,12 @@ var Parser = (function (_parse5$Parser) {
           createInstruction(function (_) {
             return (0, _incrementalDom.text)(node.data);
           });
+        } else if ('script' == node.type) {
+          // skip script
         } else {
-          // @TODO(werle) - what else ?
-          throw new TypeError('Unhandled node type ' + node.type + '.');
-        }
+            // @TODO(werle) - what else ?
+            throw new TypeError('Unhandled node type ' + node.type + '.');
+          }
       };
 
       // Walk tree and generate
@@ -473,6 +475,7 @@ var Template = (function () {
      */
 
     value: function createPartial(string) {
+      if ('string' == typeof string) string = string.replace(RegExp('`', 'g', '\\`'));
 
       /**
        * Partial template function that accepts
@@ -520,19 +523,12 @@ var Template = (function () {
           }
         }
 
-        if (header.length) header = 'var ' + header.join(', ') + ';';else header = '';
+        header = header.length ? 'var ' + header.join(', ') + ';' : '';
 
         // allow use of #{} inside of ES6 template strings
-        // defined with `. ie -
-        // const person = 'joe';
-        // const str = `Hello #{name}, ${person} says helloo';
-        if ('string' == typeof string) {
-          string = string.replace(/\#\{/g, '${');
-        }
+        if ('string' == typeof string) string = string.replace(/\#\{/g, '${');
 
-        if ('function' != typeof wrap) {
-          wrap = new Function('data', '\'use strict\'; ' + header + ' return `' + string + '`');
-        }
+        if ('function' != typeof wrap) wrap = new Function('data', '\'use strict\'; ' + header + ' return `' + string + '`');
 
         var src = '\'use strict\'; return wrap(data);';
         var fn = new Function('data', 'wrap', src);
@@ -718,7 +714,7 @@ var EventEmitter = (function () {
 })();
 
 var first = function first(a) {
-  return a && a.length && a[0] ? a[0] : a;
+  return 'string' == typeof a ? new Text(a) : a && a.length && a[0] ? a[0] : a;
 };
 
 /**
