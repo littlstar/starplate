@@ -88,6 +88,8 @@ export default class Template {
    */
 
   static createPartial (string) {
+    if ('string' == typeof string)
+      string = string.replace(RegExp('`', 'g', '\\`'));
 
     /**
      * Partial template function that accepts
@@ -116,22 +118,16 @@ export default class Template {
       for (let kv of helpers.entries())
         header.push(`${kv[0]} = ${makeSafeObject(kv[1])}`);
 
-      if (header.length)
-        header = `var ${header.join(', ')};`;
-      else
-        header = '';
+      header = ( header.length
+                ? `var ${header.join(', ')};`
+                : '' );
 
       // allow use of #{} inside of ES6 template strings
-      // defined with `. ie -
-      // const person = 'joe';
-      // const str = `Hello #{name}, ${person} says helloo';
-      if ('string' == typeof string) {
-        string = string.replace(/\#\{/g, '${').replace(RegExp('`', 'g', '\\`'));;
-      }
+      if ('string' == typeof string)
+        string = string.replace(/\#\{/g, '${')
 
-      if ('function' != typeof wrap) {
+      if ('function' != typeof wrap)
         wrap = new Function('data', `'use strict'; ${header} return \`${string}\``);
-      }
 
       const src = `'use strict'; return wrap(data);`;
       const fn = new Function('data', 'wrap', src);
