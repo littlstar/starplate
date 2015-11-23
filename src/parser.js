@@ -188,6 +188,8 @@ export default class Parser extends parse5.Parser {
       } else if ('text' == node.type && node.data) {
         // handle text nodes
         createInstruction(_ => text(node.data));
+      } else if ('script' == node.type) {
+        // skip script
       } else {
         // @TODO(werle) - what else ?
         throw new TypeError(`Unhandled node type ${node.type}.`);

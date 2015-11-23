@@ -126,7 +126,7 @@ export default class Template {
       // const person = 'joe';
       // const str = `Hello #{name}, ${person} says helloo';
       if ('string' == typeof string) {
-        string = string.replace(/\#\{/g, '${');
+        string = string.replace(/\#\{/g, '${').replace(RegExp('`', 'g', '\\`'));;
       }
 
       if ('function' != typeof wrap) {

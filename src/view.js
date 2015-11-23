@@ -27,7 +27,13 @@ import Parser from './parser';
  * @return {Mixed}
  */
 
-const first = a => a && a.length && a[0] ? a[0] : a;
+const first = a => (
+  'string' == typeof a
+  ?  new Text(a)
+  : a && a.length && a[0]
+    ? a[0]
+    : a
+);
 
 /**
  * Creates a DOM from an HTML string.
