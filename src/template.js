@@ -101,9 +101,10 @@ export default class Template {
      * @return {String}
      */
 
-    return (data) => {
+    return (data, scope) => {
       data = ensureObject(data);
 
+      scope = scope || this;
       let wrap = string;
       let header = (
         Object
@@ -129,9 +130,9 @@ export default class Template {
       if ('function' != typeof wrap)
         wrap = new Function('data', `'use strict'; ${header} return \`${string}\``);
 
-      const src = `'use strict'; return wrap(data);`;
+      const src = `'use strict'; return wrap.call(this, data);`;
       const fn = new Function('data', 'wrap', src);
-      return String(fn(data, wrap) || '');
+      return String(fn.call(scope, data, wrap) || '');
     }
   }
 
