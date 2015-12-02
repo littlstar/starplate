@@ -4,17 +4,9 @@
  * Module dependencies.
  */
 
-
-let EventEmitter = (function() {
-  try {
-    return require('events').EventEmitter;
-  } catch (e) {
-    return require('component/emitter');
-  }
-})();
-
-import Template from './template';
-import Parser from './parser';
+import { EventEmitter } from 'events'
+import Template from './template'
+import Parser from './parser'
 
 /**
  * Grab first element of an array like object

@@ -3,19 +3,13 @@
   "repo": "littlstar/starplate",
   "description": "View engine built on incremental-dom",
   "version": "0.0.23",
-  "main": "src/index.js",
+  "main": "dist/starplate.min.js",
   "author": "Joseph Werle <werle@littlstar.com>",
   "license": "MIT",
   "scripts": [
-    "src/index.js",
-    "src/view.js",
-    "src/parser.js",
-    "src/template.js"
+    "dist/starplate.min.js"
   ],
-  "dependencies": {
-    "google/incremental-dom": "*",
-    "inikulin/parse5": "*"
-  },
+  "dependencies": { },
   "keywords": [
     "view",
     "engine",

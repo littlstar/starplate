@@ -689,6 +689,8 @@ function _inherits(subClass, superClass) {
   }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 }
 
+var _events = require('events');
+
 var _template = require('./template');
 
 var _template2 = _interopRequireDefault(_template);
@@ -707,14 +709,6 @@ var _parser2 = _interopRequireDefault(_parser);
  * @param {Mixed} a
  * @return {Mixed}
  */
-
-var EventEmitter = (function () {
-  try {
-    return require('events').EventEmitter;
-  } catch (e) {
-    return require('component/emitter');
-  }
-})();
 
 var first = function first(a) {
   return 'string' == typeof a ? new Text(a) : a && a.length && a[0] ? a[0] : a;
@@ -1007,11 +1001,11 @@ var View = (function (_EventEmitter) {
   }]);
 
   return View;
-})(EventEmitter);
+})(_events.EventEmitter);
 
 exports['default'] = View;
 
-},{"./parser":2,"./template":3,"component/emitter":undefined,"events":5}],5:[function(require,module,exports){
+},{"./parser":2,"./template":3,"events":5}],5:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
