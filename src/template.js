@@ -108,29 +108,34 @@ export default class Template {
       if ('string' == typeof string) {
         var helpersList = string.match(/\{{([^{}]*) ([^{}]*)}}(.*?)\{{\/([^{}]*)}}/)
 
-        var opener  = helpersList[1],
-            item    = helpersList[2],
-            content = helpersList[3],
-            closer  = helpersList[4]
+        // Only apply helpers matching if helpers exist
+        if(helpersList && helpersList.length >= 5) {
 
-        // If the helpers do not line up, bail
-        // Example: {{each}} whatever {{/foo}} would not match
-        if(opener != closer) {
-          //console.error('Tags did not match', opener, closer)
-          return
-        }
+          var opener  = helpersList[1],
+              item    = helpersList[2],
+              content = helpersList[3],
+              closer  = helpersList[4]
 
-        // This is just an example. Really want to inject into middleware here
-        if(opener == 'each') {
+          // If the helpers do not line up, bail
+          // Example: {{each}} whatever {{/foo}} would not match
+          if(opener != closer) {
+            //console.error('Tags did not match', opener, closer)
+            return
+          }
 
-          // Remove helper opener
-          string = string.replace(`{{${opener} ${item}}}`, '')
-          // Get helper string
-          var helperString = data.collection.map( (collectionItem) => this.processString(content, collectionItem, scope))
-          // Inject helper string into partial string
-          string = string.replace(content, helperString.join(''))
-          // Remove helper closer
-          string = string.replace(`{{/${closer}}}`, '')
+          // This is just an example. Really want to inject into middleware here
+          if(opener == 'each') {
+
+            // Remove helper opener
+            string = string.replace(`{{${opener} ${item}}}`, '')
+            // Get helper string
+            var helperString = data.collection.map( (collectionItem) => this.processString(content, collectionItem, scope))
+            // Inject helper string into partial string
+            string = string.replace(content, helperString.join(''))
+            // Remove helper closer
+            string = string.replace(`{{/${closer}}}`, '')
+
+          }
 
         }
 
@@ -189,7 +194,7 @@ export default class Template {
 
   define (source) {
     this.source = source;
-    this.render = Template.createPartial(source);
+    this.render = Template.createPartial(source)
     return this;
   }
 
