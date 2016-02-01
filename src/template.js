@@ -201,6 +201,20 @@ export default class Template {
   static processString(tpl = '', data = {}, scope) {
     scope = scope || this
 
+    /*
+    If a template variable doesn't exist, return a blank string for that var.
+    This prevents the template from throwing an error on a missing var.
+    */
+    var objects = tpl.match(/#\{([^{}]*)}/g)
+    if(objects) {
+
+      objects = objects.forEach( (o) => {
+        o = o.replace('#{', '').replace('}', '')
+        if(!data[o]) data[o] = ''
+      })
+
+    }
+
     var inject = (
       Object
       .keys(data)
