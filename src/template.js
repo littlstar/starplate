@@ -57,7 +57,6 @@ function makeSafeObject (o) {
     }
   }
 
-
   return out;
 }
 
@@ -89,7 +88,7 @@ export default class Template {
 
   static createPartial (string) {
     if ('string' == typeof string)
-      string = string.replace(RegExp('`', 'g', '\\`'));
+      string = string.replace(RegExp('`', 'g', '\\`'))
 
     /**
      * Partial template function that accepts
@@ -102,37 +101,44 @@ export default class Template {
      */
 
     return (data, scope) => {
-      data = ensureObject(data);
-
-      scope = scope || this;
-      let wrap = string;
-      let header = (
-        Object
-        .keys(data)
-        .filter(key => false == helpers.has(key))
-        .map(key => {
-          let value = makeSafeObject(data[key]);
-          return `${key} = ${value}`
-        })
-      );
-
-      for (let kv of helpers.entries())
-        header.push(`${kv[0]} = ${makeSafeObject(kv[1])}`);
-
-      header = ( header.length
-                ? `var ${header.join(', ')};`
-                : '' );
+      data  = ensureObject(data)
+      scope = scope || this
 
       // allow use of #{} inside of ES6 template strings
-      if ('string' == typeof string)
-        string = string.replace(/\#\{/g, '${')
+      if ('string' == typeof string) {
+        var helpersList = string.match(/\{{([^{}]*) ([^{}]*)}}(.*?)\{{\/([^{}]*)}}/)
 
-      if ('function' != typeof wrap)
-        wrap = new Function('data', `'use strict'; ${header} return \`${string}\``);
+        var opener  = helpersList[1],
+            item    = helpersList[2],
+            content = helpersList[3],
+            closer  = helpersList[4]
 
-      const src = `'use strict'; return wrap.call(this, data);`;
-      const fn = new Function('data', 'wrap', src);
-      return String(fn.call(scope, data, wrap) || '');
+        // If the helpers do not line up, bail
+        // Example: {{each}} whatever {{/foo}} would not match
+        if(opener != closer) {
+          //console.error('Tags did not match', opener, closer)
+          return
+        }
+
+        // This is just an example. Really want to inject into middleware here
+        if(opener == 'each') {
+
+          // Remove helper opener
+          string = string.replace(`{{${opener} ${item}}}`, '')
+          // Get helper string
+          var helperString = data.collection.map( (collectionItem) => this.processString(content, collectionItem, scope))
+          // Inject helper string into partial string
+          string = string.replace(content, helperString.join(''))
+          // Remove helper closer
+          string = string.replace(`{{/${closer}}}`, '')
+
+        }
+
+      }
+
+      string = this.processString(string, data, scope)
+
+      return string
     }
   }
 
@@ -185,6 +191,34 @@ export default class Template {
     this.source = source;
     this.render = Template.createPartial(source);
     return this;
+  }
+
+  static processString(tpl = '', data = {}, scope) {
+    scope = scope || this
+
+    var inject = (
+      Object
+      .keys(data)
+      .filter(key => false == helpers.has(key))
+      .map(key => {
+        let value = makeSafeObject(data[key])
+        return `${key} = ${value}`
+      })
+    )
+
+    for (let kv of helpers.entries()) {
+      inject.push(`${kv[0]} = ${makeSafeObject(kv[1])}`)
+    }
+
+    inject = ( inject.length
+              ? `var ${inject.join(', ')};`
+              : '' )
+
+    tpl = tpl.replace(/\#\{/g, '${')
+
+    var wrap = new Function('injectDataWrapper', `'use strict'; ${inject}; return \`${tpl}\``)
+
+    return wrap.call(scope)
   }
 
   /**

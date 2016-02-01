@@ -4,7 +4,7 @@
   "description": "View engine built on incremental-dom",
   "main": "lib/index.js",
   "scripts": {
-    "compile": "babel -d lib/ src/",
+    "compile": "node_modules/.bin/babel -d lib/ src/",
     "prepublish": "npm run compile"
   },
   "keywords": [
@@ -21,7 +21,10 @@
     "parse5": "^1.5.0"
   },
   "devDependencies": {
-    "babel": "^5.8.23",
+    "babel-cli": "^6.4.5",
+    "babel-core": "^6.4.5",
+    "babel-preset-es2015": "^6.3.13",
+    "babel-preset-stage-0": "^6.3.13",
     "babelify": "^6.3.0",
     "browserify": "^11.2.0",
     "uglifyjs": "^2.4.10"
