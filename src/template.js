@@ -208,9 +208,76 @@ export default class Template {
     var objects = tpl.match(/#\{([^{}]*)}/g)
     if(objects) {
 
-      objects = objects.forEach( (o) => {
+      objects.forEach( (o) => {
         o = o.replace('#{', '').replace('}', '')
-        if(!data[o]) data[o] = ''
+
+        // Check whether a property of an object is being applied
+        if(o.indexOf('.') > -1) {
+          var p = o.split('.')
+
+          /*
+          TODO: I'm sure there's a better way to do this
+          */
+          p.forEach(function(prop, i) {
+
+            switch(i) {
+
+              case 0:
+
+                if(!data[prop]) {
+                  data[prop] = ''
+                  break
+                }
+
+              case 1:
+                /*console.log('case 1 fired', data[p[0]][prop])
+                console.log('p 0',
+                  p[0], // text
+                  data[p[0]], // the text object
+                  data[p[0]][prop] // the value of prop 'save' -> Save
+                )*/
+
+                if(typeof data[p[0]] == 'object' && data[p[0]][prop]) {
+                  break
+                }
+
+                if(typeof data[p[0]] == 'object' && !data[p[0]][prop]) {
+                  data[p[0]][prop] = ''
+                  break
+                }
+
+              case 2:
+                /*console.log('case 2 fired', data[p[0]][prop])
+                console.log('p 0',
+                  p[0], // text
+                  data[p[0]], // the text object
+                  data[p[0]][prop] // the value of prop 'save' -> Save
+                )*/
+
+                if(typeof data[p[0]] == 'object' && typeof data[p[0]][p[1]] == 'object' && data[p[0]][p[1]][prop]) {
+                  break
+                }
+
+                if(typeof data[p[0]] == 'object' && typeof data[p[0]][p[1]] == 'object' && !data[p[0]][p[1]][prop]) {
+                  data[p[0]][p[1]][prop] = ''
+                  break
+                }
+
+              default:
+
+                console.error('data tree', data)
+                throw new Error(`Property ${prop} doesnt exist`)
+
+            }
+          })
+
+
+        }
+
+        else {
+          if(!data[o]) data[o] = ''
+        }
+
       })
 
     }
@@ -233,9 +300,14 @@ export default class Template {
               ? `var ${inject.join(', ')};`
               : '' )
 
+    // TODO: figure out why sometimes a semicolon is applied, and not others
+    if(inject.substr(inject.length - 1) != ';') inject += ';'
+
+    // Remove new line characters
+    tpl = tpl.replace(/(\r\n|\n|\r)/gm, '')
     tpl = tpl.replace(/\#\{/g, '${')
 
-    var wrap = new Function('injectDataWrapper', `'use strict'; ${inject}; return \`${tpl}\``)
+    var wrap = new Function('injectDataWrapper', `'use strict'; ${inject} return \`${tpl}\``)
 
     return wrap.call(scope)
   }
