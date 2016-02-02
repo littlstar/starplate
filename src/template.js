@@ -106,6 +106,9 @@ export default class Template {
 
       // allow use of #{} inside of ES6 template strings
       if ('string' == typeof string) {
+        // Remove new line characters
+        string = string.replace(/(\r\n|\n|\r)/gm, '')
+
         var helpersList = string.match(/\{{([^{}]*) ([^{}]*)}}(.*?)\{{\/([^{}]*)}}/)
 
         // Only apply helpers matching if helpers exist
@@ -303,8 +306,6 @@ export default class Template {
     // TODO: figure out why sometimes a semicolon is applied, and not others
     if(inject.substr(inject.length - 1) != ';') inject += ';'
 
-    // Remove new line characters
-    tpl = tpl.replace(/(\r\n|\n|\r)/gm, '')
     tpl = tpl.replace(/\#\{/g, '${')
 
     var wrap = new Function('injectDataWrapper', `'use strict'; ${inject} return \`${tpl}\``)
